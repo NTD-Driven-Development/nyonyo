@@ -1,24 +1,28 @@
 import GameStartService from '../services/GameStart.js';
 import PokerService from '../services/Poker.js';
+import RoomCreatService from '../services/RoomCreat.js';
 
 export class MainController {
-
+    //api
     startGame = async (req, res) => {
-        console.log(req.body);
-        const result = await GameStartService.gameStart(req.body);
+        const game_id = await GameStartService.gameStart();
 
-        if (result.dataValues) {
-            res.json({
-                status: 'ok',
-                host: ''
-            });
-        } else {
-            res.json({
-                status: 'filed',
-            });
-        }
+        res.json({
+            status: 'room_created',
+            gameUrl: `${process.env['FRONT_HOST']}?gameId=${game_id}`
+        });
     }
 
+
+    //socket
+    creatRoom = async (data) => {
+        const game_id = await RoomCreatService.roomCreat(data);
+
+        res.json({
+            status: 'room_created',
+            gameUrl: `${process.env['FRONT_HOST']}?gameId=${game_id}`
+        });
+    }
     dealPoker = async (data) => {
         const p_cards = await PokerService.deal(data);
         console.log(p_cards);
