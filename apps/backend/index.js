@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/heartbeat-detection', (req, res) => {
+app.get('/api/health', (req, res) => {
     console.log('heartbeat ok')
     res.json({
         status: 'ok'

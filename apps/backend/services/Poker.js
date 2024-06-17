@@ -12,7 +12,6 @@ class PokerService {
                 cards.push(card);
             };
         };
-        // cards.sort(() => Math.random() - 0.5);
 
         const players_res = await RoomMember.findOne({
             // 記得 value 字串要加上引號
@@ -99,20 +98,20 @@ class PokerService {
             const dealerResult = calculateNiu(dealerHand);
             const playerResult = calculateNiu(playerHand);
 
-            if (dealerResult.niu > playerResult.niu) return 'dealer';
+            if (dealerResult.niu > playerResult.niu) return 'banker';
             if (dealerResult.niu < playerResult.niu) return 'player';
 
             const dealerMaxCard = Math.max(...dealerHand.map(card => cardValue(card) * 10 + cardSuit(card)));
             const playerMaxCard = Math.max(...playerHand.map(card => cardValue(card) * 10 + cardSuit(card)));
 
-            if (dealerMaxCard > playerMaxCard) return 'dealer';
+            if (dealerMaxCard > playerMaxCard) return 'banker';
             if (dealerMaxCard < playerMaxCard) return 'player';
 
             return 'tie';
         };
 
         const determineWinner = (gameData) => {
-            const dealerId = gameData.dealer;
+            const dealerId = gameData.banker;
             const hands = gameData.hands;
             const results = {};
 
