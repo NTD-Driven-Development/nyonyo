@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config();
 import http from 'http'
 import express from "express";
 import path from "path";
@@ -5,6 +7,7 @@ import MainRouter from "./routers/Main.js";
 import { Server } from "socket.io";
 import socketEvents from './socketEvent.js';
 import bodyParser from 'body-parser';
+
 
 import db from "./models/index.js";
 db.sequelize.sync()
@@ -25,12 +28,30 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-// const io = new Server(expressServer, {});
 const io = new Server(expressServer);
+
+io.use((socket, next) => {
+    const { playerId, playerName } = socket.handshake.query
+    const { id, name } = socket.handshake.auth
+    const player = {
+        id: playerId ?? id,
+        name: playerName ?? name,
+    }
+
+    if (typeof player.id !== 'string' || typeof player.name !== 'string') {
+        return next(
+            new Error(
+                'No Authorization handshake information found, query{"playerId": "[id]", "playerName": "[name]" } }); https://socket.io/docs/v3/middlewares/#sending-credentials ',
+            ),
+        )
+    }
+    socket.auth = { user: player }
+    // console.log(socket.auth)
+    return next()
+});
 socketEvents(io);
 
-//------------------------------------------------------------------
+
 app.get('/', (req, res) => {
     console.log('welcome ')
     res.json({
