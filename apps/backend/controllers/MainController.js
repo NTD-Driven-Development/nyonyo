@@ -36,7 +36,7 @@ export class MainController {
         return dealer;
     }
 
-    dealPoker = async (game_id) => {
+    dealPoker = async (game_id) => {// 發牌
         const p_cards = await PokerService.deal(game_id);
         // console.log('controller', p_cards);
         return p_cards;

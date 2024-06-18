@@ -17,7 +17,7 @@ class GameOverService {
             gameUrl: `${process.env['FRONT_HOST']}?gameId=${game_id}`
         };
 
-        axios.post('https://api.example.com/api/rooms/gameEnd', data)
+        axios.post(`${process.env['LOBBY_HOST']}/api/rooms/gameEnd`, data)
             .then(response => {
                 // console.log(response.data);
             })
