@@ -29,7 +29,7 @@ const socketEvents = (io) => {
 
                     // 要求結果
                     socket.on('req_result', async (data) => {
-                        socket.emit('res_result', await MainController.gameResult(data.gameId));
+                        io.in(data.gameId).emit('res_result', await MainController.gameResult(data.gameId));
                     })
 
                 } else {
