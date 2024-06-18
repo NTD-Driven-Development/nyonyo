@@ -1,9 +1,17 @@
 import db from "../models/index.js";
-const RoomMember = db.roomMembers;
+const PlayerGame = db.playerGameModels;
+import { Op } from "sequelize";
 
 class PokerService {
     // 發牌處理
-    async deal(data) {
+    async deal(game_id) {
+        const players = await PlayerGame.findAll(
+            { raw: true, },
+            {
+                where: {
+                    game_id: game_id
+                }
+            })
 
         const cards = [];
         for (let suit = 1; suit <= 4; suit++) {
@@ -13,21 +21,26 @@ class PokerService {
             };
         };
 
-        const players_res = await RoomMember.findOne({
-            // 記得 value 字串要加上引號
-            where: {
-                room_id: data.roomId
-            }
-        });
+        const players_data = players.map(player => player.player_id);
+        const playerHands = deal(players_data, cards);
 
-        const players = [];
-        players.push(players_res.dataValues.m1);
-        players.push(players_res.dataValues.m2);
-        players.push(players_res.dataValues.m3);
-        players.push(players_res.dataValues.m4);
+        for (let i = 0; i < players.length; i++) {
+            players[i].hand = playerHands[players[i].player_id];
 
-        const playerHands = deal(players, cards);
-        console.log('123456789', playerHands)
+            const check = await PlayerGame.update({
+                hand: players[i].hand,
+            },
+                {
+                    where: {
+                        id: players[i].id,
+                        hand: { [Op.is]: null }
+                    }
+                }
+            )
+            if (check == 0) { return "card_dealt" }
+        }
+
+        console.log('service', playerHands);
         return playerHands;
 
 
@@ -65,10 +78,34 @@ class PokerService {
     }
 
     // 結果處理
-    gameResult(data) {
+    async gameResult(game_id) {
+        const players = await PlayerGame.findAll(
+            { raw: true, },
+            {
+                where: {
+                    game_id: game_id
+                }
+            })
+
+
+        const hands = {}
+        let dealer = ""
+        for (let i = 0; i < players.length; i++) {
+            hands[players[i].player_id] = JSON.parse(players[i].hand)
+            console.log(players[i].role)
+
+            if (players[i].role == "dealer") { dealer = players[i].player_id }
+        }
+        // 玩家資料整理
+        const game_data = {
+            hands: hands,
+            dealer: dealer
+        }
+
+        // 11, 12, 13 轉換為 10
         const cardValue = (card) => {
             const value = Object.values(card)[0];
-            return value > 10 ? 10 : value;  // 11, 12, 13 轉換為 10
+            return value > 10 ? 10 : value;
         };
 
         const cardSuit = (card) => {
@@ -98,33 +135,37 @@ class PokerService {
             const dealerResult = calculateNiu(dealerHand);
             const playerResult = calculateNiu(playerHand);
 
-            if (dealerResult.niu > playerResult.niu) return 'banker';
-            if (dealerResult.niu < playerResult.niu) return 'player';
+            if (dealerResult.niu > playerResult.niu) return 'lose';
+            if (dealerResult.niu < playerResult.niu) return 'win';
 
             const dealerMaxCard = Math.max(...dealerHand.map(card => cardValue(card) * 10 + cardSuit(card)));
             const playerMaxCard = Math.max(...playerHand.map(card => cardValue(card) * 10 + cardSuit(card)));
 
-            if (dealerMaxCard > playerMaxCard) return 'banker';
-            if (dealerMaxCard < playerMaxCard) return 'player';
+            if (dealerMaxCard > playerMaxCard) return 'lose';
+            if (dealerMaxCard < playerMaxCard) return 'win';
 
             return 'tie';
         };
 
         const determineWinner = (gameData) => {
-            const dealerId = gameData.banker;
+            const dealerId = gameData.dealer;
             const hands = gameData.hands;
+            const dealerHand = hands[dealerId];//------
             const results = {};
 
             for (const [player, hand] of Object.entries(hands)) {
                 if (player === dealerId) continue;
-                const result = compareHands(hands[dealerId], hand);
+                const result = compareHands(dealerHand, hand);
                 results[player] = { result, hand: calculateNiu(hand) };
             }
+
+            results[dealerId] = { role: 'dealer', hand: calculateNiu(dealerHand) };//------
 
             return results;
         };
 
-        const result = determineWinner(data);
+        const result = determineWinner(game_data);
+        console.log(result)
         return result;
     }
 

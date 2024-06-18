@@ -1,12 +1,17 @@
 import db from "../models/index.js";
-const RoomMember = db.roomMembers;
-import { v4 } from 'uuid';
+const GameStatus = db.gameStatusModels;
 
-class RoomCreatService {
-    async gameStart() {
-        const game_id = v4();
-        return game_id;
+class GameStartService {
+    async gameStart(game_id) {
+        //更新遊戲房間狀態
+        GameStatus.update({
+            game_status: 'in-progress',
+        },
+            {
+                where: { game_id: game_id }
+            }
+        )
     }
 }
 
-export default new RoomCreatService();
+export default new GameStartService();
