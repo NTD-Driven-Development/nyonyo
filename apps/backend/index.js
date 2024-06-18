@@ -10,7 +10,7 @@ import bodyParser from 'body-parser';
 
 
 import db from "./models/index.js";
-db.sequelize.sync()
+db.sequelize.sync({ force: false })
     .then(() => {
         console.log("Synced db.");
     })
