@@ -87,12 +87,12 @@ class PokerService {
                 }
             })
 
-
+        console.log
         const hands = {}
         let dealer = ""
         for (let i = 0; i < players.length; i++) {
-            hands[players[i].player_id] = JSON.parse(players[i].hand)
-            console.log(players[i].role)
+            hands[players[i].player_id] = players[i].hand
+            console.log("here", players[i].hand)
 
             if (players[i].role == "dealer") { dealer = players[i].player_id }
         }

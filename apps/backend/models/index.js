@@ -17,7 +17,7 @@ const sequelize = new Sequelize(DB, USER, PASSWORD, {
         idle: _pool.idle
     }
 });
-sequelize.sync({ force: true });
+sequelize.sync({ force: false });
 
 const db = {};
 

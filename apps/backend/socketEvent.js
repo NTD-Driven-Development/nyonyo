@@ -41,7 +41,7 @@ const socketEvents = (io) => {
 
 
         socket.on('test', async (data) => {
-            socket.emit('test', await MainController.startGame(data.gameId))
+            socket.emit('test', await MainController.gameResult(data.gameId))
         });
 
         // test
