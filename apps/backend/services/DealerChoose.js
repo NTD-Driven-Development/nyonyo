@@ -14,29 +14,25 @@ class DealerChooseService {
         if (players[0].role != null) { return "game_started" }
 
         const randomIndex = Math.floor(Math.random() * players.length);
-        players.forEach((item, index) => {
+        const dealer = players.map((item, index) => {
             if (index === randomIndex) {
                 item.role = 'dealer';
-                PlayerGame.update({
-                    role: item.role,
-                },
-                    {
-                        where: { player_id: item.player_id }
-                    }
-                )
-                console.log(item.player_id, item.player_name)
-                return (item.player_id, item.player_name);
             } else {
                 item.role = 'player';
-                PlayerGame.update({
-                    role: item.role,
-                },
-                    {
-                        where: { player_id: item.player_id }
-                    }
-                )
+            }
+            PlayerGame.update({
+                role: item.role,
+            },
+                {
+                    where: { player_id: item.player_id }
+                }
+            );
+            return {
+                player_id: item.player_id,
+                role: item.role
             }
         });
+        return dealer.find((player) => player.role == 'dealer')
     }
 }
 

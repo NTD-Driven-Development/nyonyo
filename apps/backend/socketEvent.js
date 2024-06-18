@@ -16,10 +16,10 @@ const socketEvents = (io) => {
             socket.emit('room_joined', data.gameId)
 
             //監聽開始遊戲事件
-            socket.on('start_game', (data) => {
+            socket.on('start_game', async (data) => {
                 if (socket.adapter.rooms.get(data.gameId).size == 4) {
                     // 遊戲開始 返回莊家
-                    io.in(data.gameId).emit('game_started', MainController.startGame(data.gameId))
+                    io.in(data.gameId).emit('game_started', await MainController.startGame(data.gameId))
 
                     // 發牌
                     socket.on('deal_card', async (data) => {
@@ -41,7 +41,7 @@ const socketEvents = (io) => {
 
 
         socket.on('test', async (data) => {
-            socket.emit('test', await MainController.gameResult(data.gameId))
+            socket.emit('test', await MainController.startGame(data.gameId))
         });
 
         // test
