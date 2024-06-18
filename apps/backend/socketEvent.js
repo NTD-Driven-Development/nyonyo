@@ -30,6 +30,7 @@ const socketEvents = (io) => {
                     // 要求結果
                     socket.on('req_result', async (data) => {
                         io.in(data.gameId).emit('res_result', await MainController.gameResult(data.gameId));
+                        await MainController.overGame(data.gameId)
                     })
 
                 } else {
@@ -39,9 +40,8 @@ const socketEvents = (io) => {
         });
 
 
-
         socket.on('test', async (data) => {
-            socket.emit('test', await MainController.gameResult(data.gameId))
+            socket.emit('test', await MainController.overGame(data.gameId))
         });
 
         // test
