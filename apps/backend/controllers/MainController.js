@@ -3,6 +3,7 @@ import PokerService from '../services/Poker.js';
 import RoomJoinService from '../services/RoomJoin.js';
 import GameStartService from '../services/GameStart.js';
 import DealerChooseService from '../services/DealerChoose.js';
+import GameOverService from '../services/GameOver.js';
 
 export class MainController {
     //api
@@ -45,6 +46,10 @@ export class MainController {
     gameResult = async (game_id) => {
         const result = await PokerService.gameResult(game_id);
         return result;
+    }
+
+    overGame = async (game_id) => {//開始遊戲並選擇莊家 
+        await GameOverService.gameOver(game_id);
     }
 
 }
