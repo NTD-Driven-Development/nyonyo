@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
     devtools: { enabled: true },
 	devServer: {
-		port: 3011,
+		port: 3013,
 	},
 	css: ['~/assets/css/main.css'],
     postcss: {
@@ -15,4 +15,9 @@ export default defineNuxtConfig({
 	modules: [
 		'@pinia/nuxt',
     ],
+	runtimeConfig: {
+        public: {
+            'BACKEND_URL': process.env.NUXT_PUBLIC_BACKEND_URL,
+        }
+    },
 })

@@ -12,15 +12,20 @@
 
 <script setup lang="ts">
 	import { Size } from 'paper/dist/paper-core';
-	import { PullJoker } from '~/src/pullJoker';
+	import { NyoNyo } from '~/src/nyonyo';
 	import _ from 'lodash';
 
 	const wrapper = ref<HTMLDivElement>();
 	const canvas = ref<HTMLCanvasElement>();
-	const game = ref<PullJoker>();
+	const game = ref<NyoNyo>();
 
 	onMounted(() => {
-		game.value = new PullJoker(canvas.value!);
+		const route = useRoute();
+		const gameId = route.query.gameId as string ?? '';
+		const playerId = route.query.playerId as string ?? '';
+		const playerName = route.query.playerName as string ?? undefined;
+
+		game.value = new NyoNyo(canvas.value!, gameId, playerId, playerName);
 
 		window.addEventListener('resize', resizeCanvas);
 		resizeCanvas();
