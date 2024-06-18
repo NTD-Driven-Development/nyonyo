@@ -6,8 +6,8 @@ class PokerService {
     // 發牌處理
     async deal(game_id) {
         const players = await PlayerGame.findAll(
-            { raw: true, },
             {
+                raw: true,
                 where: {
                     game_id: game_id
                 }

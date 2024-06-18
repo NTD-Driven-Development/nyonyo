@@ -4,12 +4,13 @@ const PlayerGame = db.playerGameModels;
 class DealerChooseService {
     async dealerChoose(game_id) {
         const players = await PlayerGame.findAll(
-            { raw: true, },
             {
+                raw: true,
                 where: {
                     game_id: game_id
                 }
             })
+        console.log(players);
 
         if (players[0].role != null) { return "game_started" }
 

@@ -5,13 +5,18 @@ const GameStatus = db.gameStatusModels;
 class GameOverService {
     async gameOver(game_id) {
         //更新遊戲房間狀態
-        GameStatus.update({
+        const result = await GameStatus.update({
             game_status: 'over',
         },
             {
                 where: { game_id: game_id }
             }
         )
+
+        if (result[0] == 0) {
+            console.log('status was changed to over')
+            return
+        }
 
         const data = {
             gameUrl: `${process.env['FRONT_HOST']}?gameId=${game_id}`
