@@ -6,7 +6,7 @@ export default (sequelize, Sequelize) => {
         player_id: {     　　　 // 欄位名稱
             type: Sequelize.STRING,  //  資料型態
             allowNull: false,　// 能不能為空，預設是 true
-            unique: true
+            unique: false
         },
         player_name: {
             type: Sequelize.STRING,

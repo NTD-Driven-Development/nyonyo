@@ -2,7 +2,7 @@ import { DB, USER, PASSWORD, HOST, PORT, dialect as _dialect, pool as _pool } fr
 import PlayerGameModel from "./PlayerGame.model.js";
 import GameStatusModel from "./GameStatus.model.js"
 
-import Sequelize  from "sequelize";
+import Sequelize from "sequelize";
 
 const sequelize = new Sequelize(DB, USER, PASSWORD, {
     host: HOST,
@@ -17,6 +17,7 @@ const sequelize = new Sequelize(DB, USER, PASSWORD, {
         idle: _pool.idle
     }
 });
+sequelize.sync({ force: true });
 
 const db = {};
 
