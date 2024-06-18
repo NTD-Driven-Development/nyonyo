@@ -24,12 +24,12 @@ const socketEvents = (io) => {
                     // 發牌
                     socket.on('deal_card', async (data) => {
                         // socket.emit('card_dealed', await MainController.dealPoker(data.game_id))
-                        io.in(data.gameId).emit('card_dealed', await MainController.dealPoker(data.game_id))
+                        io.in(data.gameId).emit('card_dealed', await MainController.dealPoker(data.gameId))
                     })
 
                     // 要求結果
                     socket.on('req_result', async (data) => {
-                        socket.emit('res_result', await MainController.gameResult(data.game_id));
+                        socket.emit('res_result', await MainController.gameResult(data.gameId));
                     })
 
                 } else {
@@ -39,9 +39,9 @@ const socketEvents = (io) => {
         });
 
 
-        
+
         socket.on('test', async (data) => {
-            socket.emit('test', await MainController.gameResult(data.game_id))
+            socket.emit('test', await MainController.gameResult(data.gameId))
         });
 
         // test
