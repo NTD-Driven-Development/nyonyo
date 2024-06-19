@@ -98,7 +98,7 @@ export class NyoNyo extends Project {
 
                 const hand1 = new Hand();
                 hand1.position = this.view.bounds.bottomCenter.add([0, -hand1.bounds.height / 2]);
-                toast(`${players[0].key} (${players[0].key == this.bankerPlayerId ? '莊家' : '閒家'})`, this.view.bounds.bottomCenter.add([0, -hand1.bounds.height -15]), { rotate: 0 });
+                toast(`${players[0].key} (${players[0].key == this.bankerPlayerId ? '莊家' : '閒家'})`, this.view.bounds.bottomCenter.add([0, -hand1.bounds.height - 15]), { rotate: 0 });
 
                 const hand2 = new Hand();
                 hand2.position = this.view.bounds.leftCenter.add([hand1.bounds.height / 2, 0]);
