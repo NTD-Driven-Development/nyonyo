@@ -20,35 +20,6 @@ export class PullJoker extends Project {
             this.view.scale(0.5);
         }
 
-        // const data = [
-        //     {
-        //         "playerId": "3",
-        //         "name": "name",
-        //         "rank": 1
-        //     },
-        //     {
-        //         "playerId": "c8754ed4-a266-4a12-a780-3d86f5abaeec",
-        //         "name": "name",
-        //         "rank": 2
-        //     },
-        //     {
-        //         "playerId": "1",
-        //         "name": "name",
-        //         "rank": 3
-        //     },
-        //     {
-        //         "playerId": "3",
-        //         "name": "name",
-        //         "rank": 4
-        //     }
-        // ]
-
-        // const txt = _.reduce(data, (txt, v) => {
-        //     return txt += `第${v.rank}名：${v.name}${v.rank != 4 ? '\n' : ''}`
-        // }, '');
-
-        // toast(`遊戲結束`, this.view.center);
-
         this.discardPile = new DiscardPile(this.view.bounds.center);
 
         this.hands = new Map();
